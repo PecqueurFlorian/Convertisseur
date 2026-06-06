@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Convertisseur d'unités</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, sans-serif; background: #f5f5f5; display: flex; justify-content: center; padding: 2rem 1rem; }
+  .card { background: white; border: 1px solid #ddd; border-radius: 12px; padding: 1.5rem; max-width: 420px; width: 100%; }
+  h1 { font-size: 18px; font-weight: 500; margin-bottom: 1.25rem; }
+  .row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .row label { font-size: 14px; color: #555; width: 80px; text-align: right; flex-shrink: 0; }
+  .row input { flex: 1; padding: 9px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; font-family: monospace; }
+  .row input:focus { outline: none; border-color: #888; }
+  .divider { border: none; border-top: 1px solid #eee; margin: 1rem 0; }
+  button { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; background: white; font-size: 14px; cursor: pointer; margin-top: 4px; }
+  button:hover { background: #f5f5f5; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Convertisseur d'unités</h1>
+  <div class="row"><label>Octets (B)</label><input type="number" id="u0" min="0" oninput="convert(0)"></div>
+  <div class="row"><label>Kilo-octets (Ko)</label><input type="number" id="u1" min="0" oninput="convert(1)"></div>
+  <div class="row"><label>Méga-octets (Mo)</label><input type="number" id="u2" min="0" oninput="convert(2)"></div>
+  <div class="row"><label>Giga-octets (Go)</label><input type="number" id="u3" min="0" oninput="convert(3)"></div>
+  <div class="row"><label>Téra-octets (To)</label><input type="number" id="u4" min="0" oninput="convert(4)"></div>
+  <hr class="divider">
+  <button onclick="resetAll()">Réinitialiser</button>
+</div>
+<script>
+const BASE = 1024;
+const POWERS = [0, 1, 2, 3, 4];
+const IDS = ['u0','u1','u2','u3','u4'];
+
+function convert(fromIndex) {
+  const val = parseFloat(document.getElementById(IDS[fromIndex]).value);
+  if (isNaN(val) || val < 0) { resetAll(); return; }
+  const bytes = val * Math.pow(BASE, fromIndex);
+  IDS.forEach((id, i) => {
+    if (i === fromIndex) return;
+    const result = bytes / Math.pow(BASE, i);
+    document.getElementById(id).value = parseFloat(result.toPrecision(12));
+  });
+}
+
+function resetAll() {
+  IDS.forEach(id => document.getElementById(id).value = '');
+}
+</script>
+</body>
+</html>
